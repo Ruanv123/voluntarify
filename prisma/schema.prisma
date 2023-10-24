@@ -1,0 +1,125 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  password String
+  userType String
+  isAdmin  Boolean @default(false)
+
+  role Role @default(USER)
+
+  // relacao com empresa
+  empresa    Empresa[]
+  // relacao com voluntario
+  voluntario Voluntario[]
+  // relacao com vaga criada
+
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  Favoritos   Favoritos[]
+  Candidatura Candidatura[]
+}
+
+model Empresa {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  sector      String?
+  address     String?
+  profilePic  String?
+
+  vagas Vaga[]
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+model Voluntario {
+  id             Int       @id @default(autoincrement())
+  name           String
+  dataNascimento DateTime?
+  telefone       String?
+  endereco       String?
+  profilePic     String?
+
+  // relacao com vaga favorita
+  favoritos    Favoritos[]
+  // relacao com candidatura
+  candidaturas Candidatura[]
+
+  User   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+}
+
+model Vaga {
+  id           Int     @id @default(autoincrement())
+  title        String
+  description  String
+  localization String
+  slots        Int
+  slug         String
+  image        String?
+
+  isDestaque Boolean @default(false)
+
+  initalDate DateTime?
+  endDate    DateTime?
+
+  Empresa      Empresa?      @relation(fields: [empresaId], references: [id])
+  empresaId    Int?
+  Favoritos    Favoritos[]
+  candidaturas Candidatura[]
+}
+
+model Favoritos {
+  id           Int         @id @default(autoincrement())
+  userId       Int
+  vagaId       Int
+  User         User        @relation(fields: [userId], references: [id])
+  Vaga         Vaga        @relation(fields: [vagaId], references: [id])
+  Voluntario   Voluntario? @relation(fields: [voluntarioId], references: [id])
+  voluntarioId Int?
+}
+
+model Candidatura {
+  id     Int               @id @default(autoincrement())
+  status StatusCandidatura
+
+  dataCadidatura DateTime    @default(now())
+  Vaga           Vaga?       @relation(fields: [vagaId], references: [id])
+  vagaId         Int?
+  User           User?       @relation(fields: [userId], references: [id])
+  userId         Int?
+  Voluntario     Voluntario? @relation(fields: [voluntarioId], references: [id])
+  voluntarioId   Int?
+}
+
+model LogAcesso {
+  id        Int      @id @default(autoincrement())
+  mensagem  String
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// enum UserType {
+//   VOLUNTARIO
+//   EMPRESA
+// }
+
+enum StatusCandidatura {
+  PENDENTE
+  ACEITA
+  REJEITADA
+}
