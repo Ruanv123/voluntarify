@@ -16,7 +16,7 @@ interface Props {
 
 const CardList = ({ vagas }: Props) => {
   return (
-    <section className=" !w-fit overflow-hidden lg:mx-auto lg:max-w-screen-lg">
+    <section className="w-full overflow-hidden ">
       <Swiper
         slidesPerView={4}
         spaceBetween={10}
@@ -29,8 +29,8 @@ const CardList = ({ vagas }: Props) => {
         modules={[Pagination, Navigation]}
         breakpoints={{
           640: {
-            slidesPerView: 2,
-            spaceBetween: 10,
+            slidesPerView: 1,
+            spaceBetween: 50,
             loop: false,
             pagination: {
               clickable: true,
@@ -44,6 +44,11 @@ const CardList = ({ vagas }: Props) => {
           1024: {
             slidesPerView: 4,
             spaceBetween: 10,
+            loop: true,
+          },
+          1280: {
+            slidesPerView: 5,
+            spaceBetween: 15,
             loop: true,
           },
         }}

@@ -81,7 +81,7 @@
 }
 
 .swiper-slide {
-  width: 100%;
+  width: fit-content !important;
   cursor: pointer;
   height: max-content;
   transition: all 0.2s;
