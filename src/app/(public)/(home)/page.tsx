@@ -20,10 +20,9 @@ export default async function Home() {
         {/* carrousel de banners ? */}
 
         {/* Vagas em Destaque */}
-        <div>
+        <div className="mt-8 overflow-hidden px-3">
           <SectionTitle>Vagas em Destaque</SectionTitle>
           <CardList vagas={vagas} />
-          <VagaCard vaga={vagas[0]} />
         </div>
         {/* Card de anuncio */}
         <div></div>
